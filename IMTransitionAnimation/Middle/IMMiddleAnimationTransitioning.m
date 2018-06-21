@@ -1,15 +1,16 @@
 //
-//  IMPresentAnimationTransitioning.m
+//  IMMiddleAnimationTransitioning.m
 //  TransitionAnimationDemo
 //
-//  Created by 万涛 on 2018/6/21.
+//  Created by 万涛 on 2018/6/20.
 //  Copyright © 2018年 iMoon. All rights reserved.
 //
 
-#import "IMPresentAnimationTransitioning.h"
+#import "IMMiddleAnimationTransitioning.h"
+#import "UIImage+View.h"
 #import "UIView+IMRect.h"
 
-@implementation IMPresentAnimationTransitioning
+@implementation IMMiddleAnimationTransitioning
 
 //#pragma mark - UIViewControllerAnimatedTransitioning
 //- (NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext {
@@ -20,65 +21,64 @@
 - (void)presentAnimateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
     UIViewController *fromVC = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
     UIViewController *toVC = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
-    UIView *containerView = [transitionContext containerView];
-    
-    UIView *presentingSnapshot = [fromVC.view snapshotViewAfterScreenUpdates:NO];
-    presentingSnapshot.tag = 100;
-    presentingSnapshot.frame = fromVC.view.frame;
+    UIImage *tempImg = [UIImage imageWithView:fromVC.view];
     fromVC.view.hidden = YES;
-    [containerView addSubview:presentingSnapshot];
+    UIImageView *topImgView = [[UIImageView alloc] initWithImage:tempImg];
+    topImgView.clipsToBounds = YES;
+    topImgView.tag = 100;
+    [topImgView setContentMode:UIViewContentModeTop];
+    topImgView.frame = CGRectMake(0, fromVC.view.y, fromVC.view.width, self.segmentationPoint.y - self.segmentationVerticalOffset.top);
     
-    UIView *maskView = [[UIView alloc] initWithFrame:containerView.bounds];
-    maskView.tag = 200;
-    [maskView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.5]];
-    maskView.alpha = 0;
-    [containerView addSubview:maskView];
+    UIImageView *bottomImgView = [[UIImageView alloc] initWithImage:tempImg];
+    bottomImgView.clipsToBounds = YES;
+    bottomImgView.tag = 101;
+    [bottomImgView setContentMode:UIViewContentModeBottom];
+    bottomImgView.frame = CGRectMake(0, fromVC.view.y + self.segmentationPoint.y + self.segmentationVerticalOffset.bottom, fromVC.view.width, fromVC.view.height - self.segmentationPoint.y - self.segmentationVerticalOffset.bottom);
     
+    UIView *containerView = [transitionContext containerView];
+    [containerView addSubview:topImgView];
     [containerView addSubview:toVC.view];
-    toVC.view.frame = CGRectMake(0, containerView.height, containerView.width, containerView.height - self.topOffset);
-    if (self.cornerRadius > 0) {
-        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:toVC.view.bounds byRoundingCorners:(UIRectCornerTopLeft | UIRectCornerTopRight) cornerRadii:CGSizeMake(self.cornerRadius, self.cornerRadius)];
-        CAShapeLayer *maskLayer = [CAShapeLayer layer];
-        maskLayer.frame = toVC.view.bounds;
-        maskLayer.path = maskPath.CGPath;
-        toVC.view.layer.mask = maskLayer;
-    }
+    [containerView addSubview:bottomImgView];
+    
+    toVC.view.frame = CGRectMake(0, fromVC.view.y + self.segmentationPoint.y - self.segmentationVerticalOffset.top, containerView.width, fromVC.view.height);
     [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
-        toVC.view.transform = CGAffineTransformMakeTranslation(0, -toVC.view.height);
-        maskView.alpha = 1;
+        toVC.view.transform = CGAffineTransformMakeTranslation(0, -topImgView.height);
+        topImgView.transform = CGAffineTransformMakeTranslation(0, -topImgView.height);
+        bottomImgView.transform = CGAffineTransformMakeTranslation(0, bottomImgView.height);
+        topImgView.alpha = 0;
     } completion:^(BOOL finished) {
-        [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
-        if ([transitionContext transitionWasCancelled]) {
-            fromVC.view.hidden = NO;
-            [presentingSnapshot removeFromSuperview];
-        }
+        [transitionContext completeTransition:YES];
     }];
 }
 
 #pragma mark - dismiss 动画
-- (void)dismissAnimateTransition:(nonnull id<UIViewControllerContextTransitioning>)transitionContext {
+- (void)dismissAnimateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
     UIViewController *fromVC = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
     UIViewController *toVC = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
-    UIView *maskView;
-    UIView *presentingSnapshot;
+    UIView *topImgView;
+    UIView *bottomImgView;
     for (UIView *subV in [transitionContext containerView].subviews) {
         if (subV.tag == 100) {
-            presentingSnapshot = subV;
-        } else if (subV.tag == 200) {
-            maskView = subV;
+            topImgView = subV;
+        } else if (subV.tag == 101) {
+            bottomImgView = subV;
         }
     }
+    [bottomImgView.superview bringSubviewToFront:bottomImgView];
     [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
-        maskView.alpha = 0;
         fromVC.view.transform = CGAffineTransformIdentity;
+        topImgView.transform = CGAffineTransformIdentity;
+        bottomImgView.transform = CGAffineTransformIdentity;
+        topImgView.alpha = 1;
     } completion:^(BOOL finished) {
         if ([transitionContext transitionWasCancelled]) {
             [transitionContext completeTransition:NO];
-        }else{
+        } else {
             [transitionContext completeTransition:YES];
+            toVC.view.y = topImgView.y;
             toVC.view.hidden = NO;
-            [maskView removeFromSuperview];
-            [presentingSnapshot removeFromSuperview];
+            [topImgView removeFromSuperview];
+            [bottomImgView removeFromSuperview];
         }
     }];
 }
@@ -99,7 +99,7 @@
             self.interactive = NO;
             if (percent > 0.5) {
                 [self finishInteractiveTransition];
-            }else{
+            } else {
                 [self cancelInteractiveTransition];
             }
         } break;

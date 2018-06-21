@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		152401F255547DD5186FE3C2 /* libPods-IMTransitionAnimationDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 71035BD625A47EEB02D83615 /* libPods-IMTransitionAnimationDemo.a */; };
 		B7611DE820DB9B94009C4083 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B7611DE720DB9B94009C4083 /* AppDelegate.m */; };
 		B7611DEE20DB9B95009C4083 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B7611DEC20DB9B95009C4083 /* Main.storyboard */; };
 		B7611DF020DB9B97009C4083 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B7611DEF20DB9B97009C4083 /* Assets.xcassets */; };
@@ -22,6 +23,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		039B57BBF8EF4035E63E4632 /* Pods-IMTransitionAnimationDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IMTransitionAnimationDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-IMTransitionAnimationDemo/Pods-IMTransitionAnimationDemo.release.xcconfig"; sourceTree = "<group>"; };
+		71035BD625A47EEB02D83615 /* libPods-IMTransitionAnimationDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IMTransitionAnimationDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B7611DE320DB9B94009C4083 /* IMTransitionAnimationDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IMTransitionAnimationDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B7611DE620DB9B94009C4083 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B7611DE720DB9B94009C4083 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -44,6 +47,7 @@
 		B7611E1320DB9C8C009C4083 /* IMBaseAnimationTransitioning.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IMBaseAnimationTransitioning.m; sourceTree = "<group>"; };
 		B7611E1720DB9DA8009C4083 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		B7611E1820DB9DA8009C4083 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		CB3D00B9C9DE5E93C4A3A5AB /* Pods-IMTransitionAnimationDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IMTransitionAnimationDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-IMTransitionAnimationDemo/Pods-IMTransitionAnimationDemo.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,17 +55,55 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				152401F255547DD5186FE3C2 /* libPods-IMTransitionAnimationDemo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5BF03F6949D535DF0EF99662 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				71035BD625A47EEB02D83615 /* libPods-IMTransitionAnimationDemo.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		78D7A667312E652584DA9B0D /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				CB3D00B9C9DE5E93C4A3A5AB /* Pods-IMTransitionAnimationDemo.debug.xcconfig */,
+				039B57BBF8EF4035E63E4632 /* Pods-IMTransitionAnimationDemo.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		B72040DB20DBA34C003E7C93 /* Present */ = {
+			isa = PBXGroup;
+			children = (
+				B7611E0D20DB9C8C009C4083 /* IMPresentAnimationTransitioning.m */,
+				B7611E0F20DB9C8C009C4083 /* IMPresentAnimationTransitioning.h */,
+			);
+			path = Present;
+			sourceTree = "<group>";
+		};
+		B72040DC20DBA35D003E7C93 /* Middle */ = {
+			isa = PBXGroup;
+			children = (
+				B7611E0E20DB9C8C009C4083 /* IMMiddleAnimationTransitioning.h */,
+				B7611E1020DB9C8C009C4083 /* IMMiddleAnimationTransitioning.m */,
+			);
+			path = Middle;
+			sourceTree = "<group>";
+		};
 		B7611DDA20DB9B94009C4083 = {
 			isa = PBXGroup;
 			children = (
 				B7611DE520DB9B94009C4083 /* IMTransitionAnimationDemo */,
 				B7611DE420DB9B94009C4083 /* Products */,
+				78D7A667312E652584DA9B0D /* Pods */,
+				5BF03F6949D535DF0EF99662 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -147,11 +189,9 @@
 		B7611E0C20DB9C8C009C4083 /* IMTransitionAnimation */ = {
 			isa = PBXGroup;
 			children = (
-				B7611E0D20DB9C8C009C4083 /* IMPresentAnimationTransitioning.m */,
-				B7611E0E20DB9C8C009C4083 /* IMMiddleAnimationTransitioning.h */,
-				B7611E0F20DB9C8C009C4083 /* IMPresentAnimationTransitioning.h */,
-				B7611E1020DB9C8C009C4083 /* IMMiddleAnimationTransitioning.m */,
 				B7611E1120DB9C8C009C4083 /* Base */,
+				B72040DC20DBA35D003E7C93 /* Middle */,
+				B72040DB20DBA34C003E7C93 /* Present */,
 			);
 			name = IMTransitionAnimation;
 			path = ../../IMTransitionAnimation;
@@ -173,9 +213,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B7611DF920DB9B97009C4083 /* Build configuration list for PBXNativeTarget "IMTransitionAnimationDemo" */;
 			buildPhases = (
+				B7339CEB0611DDFBA652969D /* [CP] Check Pods Manifest.lock */,
 				B7611DDF20DB9B94009C4083 /* Sources */,
 				B7611DE020DB9B94009C4083 /* Frameworks */,
 				B7611DE120DB9B94009C4083 /* Resources */,
+				C3406CFE9DFA6B77AE4FBC71 /* [CP] Embed Pods Frameworks */,
+				760DE57CF426FC2469D9B160 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -230,6 +273,60 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		760DE57CF426FC2469D9B160 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-IMTransitionAnimationDemo/Pods-IMTransitionAnimationDemo-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B7339CEB0611DDFBA652969D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-IMTransitionAnimationDemo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C3406CFE9DFA6B77AE4FBC71 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-IMTransitionAnimationDemo/Pods-IMTransitionAnimationDemo-frameworks.sh",
+				"${PODS_ROOT}/Reveal-SDK/RevealServer-13/iOS/RevealServer.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RevealServer.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-IMTransitionAnimationDemo/Pods-IMTransitionAnimationDemo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		B7611DDF20DB9B94009C4083 /* Sources */ = {
@@ -382,16 +479,14 @@
 		};
 		B7611DFA20DB9B97009C4083 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CB3D00B9C9DE5E93C4A3A5AB /* Pods-IMTransitionAnimationDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 23S978MA67;
 				INFOPLIST_FILE = IMTransitionAnimationDemo/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.imoon.IMTransitionAnimationDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -400,16 +495,14 @@
 		};
 		B7611DFB20DB9B97009C4083 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 039B57BBF8EF4035E63E4632 /* Pods-IMTransitionAnimationDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 23S978MA67;
 				INFOPLIST_FILE = IMTransitionAnimationDemo/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.imoon.IMTransitionAnimationDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";

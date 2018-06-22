@@ -36,7 +36,7 @@
     
     [containerView addSubview:toVC.view];
     toVC.view.frame = CGRectMake(0, containerView.height, containerView.width, containerView.height - self.topOffset);
-    if (self.cornerRadius > 0) {
+    if (self.topOffset > 0 && self.cornerRadius > 0) {
         UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:toVC.view.bounds byRoundingCorners:(UIRectCornerTopLeft | UIRectCornerTopRight) cornerRadii:CGSizeMake(self.cornerRadius, self.cornerRadius)];
         CAShapeLayer *maskLayer = [CAShapeLayer layer];
         maskLayer.frame = toVC.view.bounds;
@@ -48,7 +48,6 @@
         maskView.alpha = 1;
     } completion:^(BOOL finished) {
         [transitionContext completeTransition:YES];
-        NSLog(@" - %@ - %@", fromVC.view, NSStringFromCGRect(fromVC.view.frame));
     }];
 }
 
@@ -87,19 +86,13 @@
     CGFloat percent = transitionY / UIScreen.mainScreen.bounds.size.height;
     switch (panGr.state) {
         case UIGestureRecognizerStateBegan: {
-            self.interactive = YES;
-            [self.gestureVC dismissViewControllerAnimated:YES completion:nil];
+            [self updateTransitionPercent:0 state:IMTransitionPercentStateBegin];
         } break;
         case UIGestureRecognizerStateChanged: {
-            [self updateInteractiveTransition:percent];
+            [self updateTransitionPercent:percent state:IMTransitionPercentStateChanged];
         } break;
         case UIGestureRecognizerStateEnded: {
-            self.interactive = NO;
-            if (percent > 0.5) {
-                [self finishInteractiveTransition];
-            } else {
-                [self cancelInteractiveTransition];
-            }
+            [self updateTransitionPercent:percent state:IMTransitionPercentStateEnded];
         } break;
         default:
             break;

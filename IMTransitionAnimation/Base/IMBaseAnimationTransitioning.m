@@ -17,10 +17,10 @@
 
 - (void)animateTransition:(nonnull id<UIViewControllerContextTransitioning>)transitionContext {
     switch (self.transitionType) {
-        case TransitionTypePresent: {
+        case IMTransitionTypePresent: {
             [self presentAnimateTransition:transitionContext];
         } break;
-        case TransitionTypeDismiss: {
+        case IMTransitionTypeDismiss: {
             [self dismissAnimateTransition:transitionContext];
         } break;
     }
@@ -37,12 +37,12 @@
 
 #pragma mark - UIViewControllerTransitioningDelegate
 - (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source {
-    self.transitionType = TransitionTypePresent;
+    self.transitionType = IMTransitionTypePresent;
     return self;
 }
 
 - (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
-    self.transitionType = TransitionTypeDismiss;
+    self.transitionType = IMTransitionTypeDismiss;
     return self;
 }
 
@@ -51,21 +51,65 @@
 }
 
 #pragma mark - 添加手势
-- (instancetype)initWithGestureVC:(UIViewController *)gestureVC {
-    if (self = [super init]) {
-        self.gestureVC = gestureVC;
-    }
-    return self;
+- (UIPanGestureRecognizer *)addPanGerstureForTargetView:(UIView *)targetView dismissVC:(UIViewController *)dismissVC {
+    self.dismissVC = dismissVC;
+    UIPanGestureRecognizer *panGr = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
+    panGr.delegate = self;
+    [targetView addGestureRecognizer:panGr];
+    return panGr;
 }
 
-- (void)addPanGerstureForTarget:(UIView *)target {
-    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
-    [target addGestureRecognizer:pan];
+- (void)updateTransitionPercent:(CGFloat)percent state:(IMTransitionPercentState)state {
+    if (percent < 0) percent = 0;
+    if (percent > 1) percent = 1;
+    switch (state) {
+        case IMTransitionPercentStateBegin: {
+            self.interactive = YES;
+            if (!self.dismissVC.isBeingDismissed) {
+                [self.dismissVC dismissViewControllerAnimated:YES completion:nil];
+            }
+        } break;
+        case IMTransitionPercentStateChanged: {
+            [self updateInteractiveTransition:percent];
+        } break;
+        case IMTransitionPercentStateEnded: {
+            self.interactive = NO;
+            if (percent > self.percentThreshold) {
+                [self finishInteractiveTransition];
+            } else {
+                [self cancelInteractiveTransition];
+            }
+        } break;
+        default:
+            break;
+    }
+}
+
+- (CGFloat)percentThreshold {
+    if (_percentThreshold <= 0) {
+        _percentThreshold = 0.5;
+    }
+    if (_percentThreshold > 1) {
+        _percentThreshold = 0.5;
+    }
+    return _percentThreshold;
 }
 
 /** 手势回调 【需要子类实现】 */
 - (void)handlePanGesture:(UIPanGestureRecognizer *)panGr {
     @throw [NSException exceptionWithName:@"Unimplemented Methods" reason:[NSString stringWithFormat:@"The \"%@\" method has not yet been implemented in \"%@\"", NSStringFromSelector(_cmd), NSStringFromClass(self.class)] userInfo:nil];
+}
+
+#pragma mark - UIGestureRecognizer Delegate
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    if ([otherGestureRecognizer.view isKindOfClass:UIScrollView.class]) {
+        UIScrollView *scrollView = (UIScrollView *)otherGestureRecognizer.view;
+        if (scrollView.contentOffset.y <= self.dismissScrollThreshold) {
+            [scrollView setContentOffset:CGPointMake(0, self.dismissScrollThreshold)];
+            return YES;
+        }
+    }
+    return NO;
 }
 
 @end

@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+@class IMPresentAnimationTransitioning;
+@class IMMiddleAnimationTransitioning;
 
 @interface TableViewController : UITableViewController
+
+@property (nonatomic, strong) IMPresentAnimationTransitioning *presentAnimationTransitioning;
+@property (nonatomic, strong) IMMiddleAnimationTransitioning *middleAnimationTransitioning;
 
 @end

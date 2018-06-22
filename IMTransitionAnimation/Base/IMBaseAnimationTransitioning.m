@@ -8,6 +8,8 @@
 
 #import "IMBaseAnimationTransitioning.h"
 
+#define DefaultPercentThreshold 0.5
+
 @implementation IMBaseAnimationTransitioning
 
 #pragma mark - UIViewControllerAnimatedTransitioning
@@ -77,6 +79,7 @@
             if (percent > self.percentThreshold) {
                 [self finishInteractiveTransition];
             } else {
+                self.completionSpeed = percent;
                 [self cancelInteractiveTransition];
             }
         } break;
@@ -87,10 +90,10 @@
 
 - (CGFloat)percentThreshold {
     if (_percentThreshold <= 0) {
-        _percentThreshold = 0.5;
+        _percentThreshold = DefaultPercentThreshold;
     }
     if (_percentThreshold > 1) {
-        _percentThreshold = 0.5;
+        _percentThreshold = DefaultPercentThreshold;
     }
     return _percentThreshold;
 }
@@ -102,7 +105,9 @@
 
 #pragma mark - UIGestureRecognizer Delegate
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-    if ([otherGestureRecognizer.view isKindOfClass:UIScrollView.class]) {
+    if ([otherGestureRecognizer.view isKindOfClass:UIScrollView.class]
+        && [otherGestureRecognizer isKindOfClass:UIPanGestureRecognizer.class]
+        && [(UIPanGestureRecognizer *)otherGestureRecognizer translationInView:otherGestureRecognizer.view].y > 0) {
         UIScrollView *scrollView = (UIScrollView *)otherGestureRecognizer.view;
         if (scrollView.contentOffset.y <= self.dismissScrollThreshold) {
             [scrollView setContentOffset:CGPointMake(0, self.dismissScrollThreshold)];

@@ -10,6 +10,7 @@
 #import "IMPresentAnimationTransitioning.h"
 #import "IMMiddleAnimationTransitioning.h"
 #import "ViewController.h"
+#import "UIView+IMRect.h"
 
 static NSString * const CellIdentifier = @"CellIdentifier";
 
@@ -54,7 +55,7 @@ static NSString * const CellIdentifier = @"CellIdentifier";
 #pragma mark - UITableView Delegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    if (self.presentAnimationTransitioning || self.middleAnimationTransitioning) {
+    if ([self animationTransitioning]) {
         if (indexPath.row % 2) {
             TableViewController *tableVC = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"TableViewController"];
             [self.navigationController pushViewController:tableVC animated:YES];
@@ -78,15 +79,6 @@ static NSString * const CellIdentifier = @"CellIdentifier";
         } else {
             UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
             CGRect cellFrame = [cell convertRect:cell.bounds toView:self.navigationController.view];
-//            UIViewController *vc = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"ViewController"];
-//            self.middleAnimationTransitioning = [[IMMiddleAnimationTransitioning alloc] init];
-//            self.middleAnimationTransitioning.segmentationPoint = CGPointMake(0, CGRectGetMidY(cellFrame));
-//            self.middleAnimationTransitioning.segmentationVerticalOffset = UIEdgeInsetsMake(CGRectGetHeight(cellFrame) / 2, 0, CGRectGetHeight(cellFrame) / 2, 0);
-//            [self.middleAnimationTransitioning addPanGerstureForTargetView:vc.view dismissVC:vc];
-//            vc.transitioningDelegate = self.middleAnimationTransitioning;
-//            //            [self.navigationController presentViewController:naviVC animated:YES completion:nil];
-//            [self presentViewController:vc animated:YES completion:nil];
-            
             UINavigationController *naviVC = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"NavigationVC"];
             TableViewController *tableVC = (TableViewController *)naviVC.topViewController;
             tableVC.middleAnimationTransitioning = [[IMMiddleAnimationTransitioning alloc] init];
@@ -102,10 +94,8 @@ static NSString * const CellIdentifier = @"CellIdentifier";
 
 #pragma mark - UIScrollView Delegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (_didAppear && [self animationTransitioning]) {
-        if (scrollView.contentOffset.y < [self animationTransitioning].dismissScrollThreshold) {
-            [scrollView setContentOffset:CGPointMake(0, [self animationTransitioning].dismissScrollThreshold)];
-        }
+    if ([self animationTransitioning].interactive) {
+        [scrollView setContentOffset:CGPointMake(0, [self animationTransitioning].dismissScrollThreshold)];
     }
 }
 

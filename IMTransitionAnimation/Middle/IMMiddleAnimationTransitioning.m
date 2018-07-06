@@ -23,19 +23,25 @@
     UIViewController *toVC = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
     UIImage *tempImg = [UIImage imageWithView:fromVC.view];
     fromVC.view.hidden = YES;
+    
     UIImageView *topImgView = [[UIImageView alloc] initWithImage:tempImg];
     topImgView.clipsToBounds = YES;
     topImgView.tag = 100;
     [topImgView setContentMode:UIViewContentModeTop];
     topImgView.frame = CGRectMake(0, fromVC.view.y, fromVC.view.width, self.segmentationPoint.y - self.segmentationVerticalOffset.top);
-    
+
     UIImageView *bottomImgView = [[UIImageView alloc] initWithImage:tempImg];
     bottomImgView.clipsToBounds = YES;
     bottomImgView.tag = 101;
     [bottomImgView setContentMode:UIViewContentModeBottom];
     bottomImgView.frame = CGRectMake(0, fromVC.view.y + self.segmentationPoint.y + self.segmentationVerticalOffset.bottom, fromVC.view.width, fromVC.view.height - self.segmentationPoint.y - self.segmentationVerticalOffset.bottom);
+    UIView *bottomImgMaskView = [[UIView alloc] initWithFrame:bottomImgView.bounds];
+    bottomImgMaskView.backgroundColor = UIColor.blackColor;
+    bottomImgMaskView.alpha = 0;
+    [bottomImgView addSubview:bottomImgMaskView];
     
     UIView *containerView = [transitionContext containerView];
+    containerView.backgroundColor = UIColor.blackColor;
     [containerView addSubview:topImgView];
     [containerView addSubview:toVC.view];
     [containerView addSubview:bottomImgView];
@@ -46,6 +52,7 @@
         topImgView.transform = CGAffineTransformMakeTranslation(0, -topImgView.height);
         bottomImgView.transform = CGAffineTransformMakeTranslation(0, bottomImgView.height);
         topImgView.alpha = 0;
+        bottomImgMaskView.alpha = 1;
     } completion:^(BOOL finished) {
         [transitionContext completeTransition:YES];
     }];
@@ -57,11 +64,13 @@
     UIViewController *toVC = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
     UIView *topImgView;
     UIView *bottomImgView;
+    UIView *bottomImgMaskView;
     for (UIView *subV in [transitionContext containerView].subviews) {
         if (subV.tag == 100) {
             topImgView = subV;
         } else if (subV.tag == 101) {
             bottomImgView = subV;
+            bottomImgMaskView = bottomImgView.subviews.lastObject;
         }
     }
     [bottomImgView.superview bringSubviewToFront:bottomImgView];
@@ -70,6 +79,7 @@
         topImgView.transform = CGAffineTransformIdentity;
         bottomImgView.transform = CGAffineTransformIdentity;
         topImgView.alpha = 1;
+        bottomImgMaskView.alpha = 0;
     } completion:^(BOOL finished) {
         if ([transitionContext transitionWasCancelled]) {
             [transitionContext completeTransition:NO];
@@ -85,11 +95,12 @@
 
 #pragma mark - 手势
 - (void)handlePanGesture:(UIPanGestureRecognizer *)panGr {
+    if (self.noResponseGesture) return;
     CGFloat transitionY = [panGr translationInView:panGr.view].y;
-    CGFloat percent = transitionY / UIScreen.mainScreen.bounds.size.height;
+    CGFloat percent = transitionY / UIScreen.mainScreen.bounds.size.height * 2;
     switch (panGr.state) {
         case UIGestureRecognizerStateBegan: {
-            [self updateTransitionPercent:0 state:IMTransitionPercentStateBegin];
+            [self updateTransitionPercent:percent state:IMTransitionPercentStateBegin];
         } break;
         case UIGestureRecognizerStateChanged: {
             [self updateTransitionPercent:percent state:IMTransitionPercentStateChanged];

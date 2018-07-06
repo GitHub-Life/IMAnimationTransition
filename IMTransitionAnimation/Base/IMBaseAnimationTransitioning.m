@@ -7,8 +7,9 @@
 //
 
 #import "IMBaseAnimationTransitioning.h"
+#import "IMSpecialTag.h"
 
-#define DefaultPercentThreshold 0.5
+#define DefaultPercentThreshold 0.3
 
 @implementation IMBaseAnimationTransitioning
 
@@ -77,6 +78,7 @@
         case IMTransitionPercentStateEnded: {
             self.interactive = NO;
             if (percent > self.percentThreshold) {
+                self.completionSpeed = 1;
                 [self finishInteractiveTransition];
             } else {
                 self.completionSpeed = percent;
@@ -107,7 +109,8 @@
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
     if ([otherGestureRecognizer.view isKindOfClass:UIScrollView.class]
         && [otherGestureRecognizer isKindOfClass:UIPanGestureRecognizer.class]
-        && [(UIPanGestureRecognizer *)otherGestureRecognizer translationInView:otherGestureRecognizer.view].y > 0) {
+        && [(UIPanGestureRecognizer *)otherGestureRecognizer translationInView:otherGestureRecognizer.view].y > 0
+        && otherGestureRecognizer.view.tag != IMPageViewController_ScrollViewTag) {
         UIScrollView *scrollView = (UIScrollView *)otherGestureRecognizer.view;
         if (scrollView.contentOffset.y <= self.dismissScrollThreshold) {
             [scrollView setContentOffset:CGPointMake(0, self.dismissScrollThreshold)];

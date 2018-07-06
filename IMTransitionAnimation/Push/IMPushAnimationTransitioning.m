@@ -1,15 +1,15 @@
 //
-//  IMPresentAnimationTransitioning.m
-//  TransitionAnimationDemo
+//  IMPushAnimationTransitioning.m
+//  Bullseye
 //
-//  Created by 万涛 on 2018/6/21.
-//  Copyright © 2018年 iMoon. All rights reserved.
+//  Created by 万涛 on 2018/6/29.
+//  Copyright © 2018年 niuyan.com. All rights reserved.
 //
 
-#import "IMPresentAnimationTransitioning.h"
+#import "IMPushAnimationTransitioning.h"
 #import "UIView+IMRect.h"
 
-@implementation IMPresentAnimationTransitioning
+@implementation IMPushAnimationTransitioning
 
 //#pragma mark - UIViewControllerAnimatedTransitioning
 //- (NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext {
@@ -35,16 +35,11 @@
     [containerView addSubview:maskView];
     
     [containerView addSubview:toVC.view];
-    toVC.view.frame = CGRectMake(0, containerView.height, containerView.width, containerView.height - self.topOffset);
-    if (self.topOffset > 0 && self.cornerRadius > 0) {
-        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:toVC.view.bounds byRoundingCorners:(UIRectCornerTopLeft | UIRectCornerTopRight) cornerRadii:CGSizeMake(self.cornerRadius, self.cornerRadius)];
-        CAShapeLayer *maskLayer = [CAShapeLayer layer];
-        maskLayer.frame = toVC.view.bounds;
-        maskLayer.path = maskPath.CGPath;
-        toVC.view.layer.mask = maskLayer;
-    }
+    toVC.view.frame = CGRectMake(containerView.width, 0, containerView.width, containerView.height);
+
     [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
-        toVC.view.transform = CGAffineTransformMakeTranslation(0, -toVC.view.height);
+        presentingSnapshot.transform = CGAffineTransformMakeScale(0.95, 0.95);
+        toVC.view.transform = CGAffineTransformMakeTranslation(-toVC.view.width, 0);
         maskView.alpha = 1;
     } completion:^(BOOL finished) {
         [transitionContext completeTransition:YES];
@@ -67,6 +62,7 @@
     [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
         maskView.alpha = 0;
         fromVC.view.transform = CGAffineTransformIdentity;
+        presentingSnapshot.transform = CGAffineTransformIdentity;
     } completion:^(BOOL finished) {
         if ([transitionContext transitionWasCancelled]) {
             [transitionContext completeTransition:NO];
@@ -82,8 +78,8 @@
 
 #pragma mark - 手势
 - (void)handlePanGesture:(UIPanGestureRecognizer *)panGr {
-    CGFloat transitionY = [panGr translationInView:panGr.view].y;
-    CGFloat percent = transitionY / UIScreen.mainScreen.bounds.size.height * 2;
+    CGFloat transitionX = [panGr translationInView:panGr.view].x;
+    CGFloat percent = transitionX / UIScreen.mainScreen.bounds.size.width;
     switch (panGr.state) {
         case UIGestureRecognizerStateBegan: {
             [self updateTransitionPercent:percent state:IMTransitionPercentStateBegin];

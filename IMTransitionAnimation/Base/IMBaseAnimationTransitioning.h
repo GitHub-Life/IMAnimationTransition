@@ -56,6 +56,7 @@ typedef NS_ENUM(NSInteger, IMTransitionPercentState) {
  */
 - (void)updateTransitionPercent:(CGFloat)percent state:(IMTransitionPercentState)state;
 
+@property (nonatomic, assign) BOOL noResponseGesture;
 /** <#注释#> */
 @property (nonatomic, assign) CGFloat dismissScrollThreshold;
 

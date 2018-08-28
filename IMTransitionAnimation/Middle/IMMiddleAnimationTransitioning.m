@@ -54,7 +54,9 @@
         topImgView.alpha = 0;
         bottomImgMaskView.alpha = 1;
     } completion:^(BOOL finished) {
-        [transitionContext completeTransition:YES];
+        if (finished) {
+            [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
+        }
     }];
 }
 
@@ -74,21 +76,22 @@
         }
     }
     [bottomImgView.superview bringSubviewToFront:bottomImgView];
-    [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
+    [UIView animateWithDuration:[self transitionDuration:transitionContext] delay:0.05 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         fromVC.view.transform = CGAffineTransformIdentity;
         topImgView.transform = CGAffineTransformIdentity;
         bottomImgView.transform = CGAffineTransformIdentity;
         topImgView.alpha = 1;
         bottomImgMaskView.alpha = 0;
     } completion:^(BOOL finished) {
-        if ([transitionContext transitionWasCancelled]) {
-            [transitionContext completeTransition:NO];
-        } else {
-            [transitionContext completeTransition:YES];
-            toVC.view.y = topImgView.y;
-            toVC.view.hidden = NO;
-            [topImgView removeFromSuperview];
-            [bottomImgView removeFromSuperview];
+        if (finished) {
+            BOOL cancel = [transitionContext transitionWasCancelled];
+            if (!cancel) {
+                toVC.view.y = topImgView.y;
+                toVC.view.hidden = NO;
+                [topImgView removeFromSuperview];
+                [bottomImgView removeFromSuperview];
+            }
+            [transitionContext completeTransition:!cancel];
         }
     }];
 }

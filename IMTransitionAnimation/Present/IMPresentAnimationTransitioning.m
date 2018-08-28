@@ -64,7 +64,7 @@
             maskView = subV;
         }
     }
-    [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
+    [UIView animateWithDuration:[self transitionDuration:transitionContext] delay:0.05 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         maskView.alpha = 0;
         fromVC.view.transform = CGAffineTransformIdentity;
     } completion:^(BOOL finished) {
@@ -72,7 +72,9 @@
             [transitionContext completeTransition:NO];
         } else {
             [transitionContext completeTransition:YES];
-            toVC.view.frame = presentingSnapshot.frame;
+            if (presentingSnapshot) {
+                toVC.view.frame = presentingSnapshot.frame;
+            }
             toVC.view.hidden = NO;
             [maskView removeFromSuperview];
             [presentingSnapshot removeFromSuperview];

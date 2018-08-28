@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		152401F255547DD5186FE3C2 /* libPods-IMTransitionAnimationDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 71035BD625A47EEB02D83615 /* libPods-IMTransitionAnimationDemo.a */; };
+		B7001B7921354CA9009C8709 /* IMPresentListAnimationTransitioning.m in Sources */ = {isa = PBXBuildFile; fileRef = B7001B7721354CA9009C8709 /* IMPresentListAnimationTransitioning.m */; };
 		B70796D020EF616E00195A65 /* IMPresentAnimationTransitioning.m in Sources */ = {isa = PBXBuildFile; fileRef = B70796C420EF616E00195A65 /* IMPresentAnimationTransitioning.m */; };
 		B70796D120EF616E00195A65 /* IMMiddleAnimationTransitioning.m in Sources */ = {isa = PBXBuildFile; fileRef = B70796C820EF616E00195A65 /* IMMiddleAnimationTransitioning.m */; };
 		B70796D220EF616E00195A65 /* IMPushAnimationTransitioning.m in Sources */ = {isa = PBXBuildFile; fileRef = B70796CB20EF616E00195A65 /* IMPushAnimationTransitioning.m */; };
@@ -26,6 +27,8 @@
 /* Begin PBXFileReference section */
 		039B57BBF8EF4035E63E4632 /* Pods-IMTransitionAnimationDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IMTransitionAnimationDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-IMTransitionAnimationDemo/Pods-IMTransitionAnimationDemo.release.xcconfig"; sourceTree = "<group>"; };
 		71035BD625A47EEB02D83615 /* libPods-IMTransitionAnimationDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IMTransitionAnimationDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B7001B7721354CA9009C8709 /* IMPresentListAnimationTransitioning.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IMPresentListAnimationTransitioning.m; sourceTree = "<group>"; };
+		B7001B7821354CA9009C8709 /* IMPresentListAnimationTransitioning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IMPresentListAnimationTransitioning.h; sourceTree = "<group>"; };
 		B70796C420EF616E00195A65 /* IMPresentAnimationTransitioning.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IMPresentAnimationTransitioning.m; sourceTree = "<group>"; };
 		B70796C520EF616E00195A65 /* IMPresentAnimationTransitioning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IMPresentAnimationTransitioning.h; sourceTree = "<group>"; };
 		B70796C720EF616E00195A65 /* IMMiddleAnimationTransitioning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IMMiddleAnimationTransitioning.h; sourceTree = "<group>"; };
@@ -100,6 +103,8 @@
 			children = (
 				B70796C420EF616E00195A65 /* IMPresentAnimationTransitioning.m */,
 				B70796C520EF616E00195A65 /* IMPresentAnimationTransitioning.h */,
+				B7001B7821354CA9009C8709 /* IMPresentListAnimationTransitioning.h */,
+				B7001B7721354CA9009C8709 /* IMPresentListAnimationTransitioning.m */,
 			);
 			path = Present;
 			sourceTree = "<group>";
@@ -358,6 +363,7 @@
 				B70796D320EF616E00195A65 /* IMBaseAnimationTransitioning.m in Sources */,
 				B7611DE820DB9B94009C4083 /* AppDelegate.m in Sources */,
 				B7611E0120DB9C09009C4083 /* TableViewController.m in Sources */,
+				B7001B7921354CA9009C8709 /* IMPresentListAnimationTransitioning.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

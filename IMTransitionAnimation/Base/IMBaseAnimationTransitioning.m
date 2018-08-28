@@ -66,19 +66,18 @@
     if (percent < 0) percent = 0;
     if (percent > 1) percent = 1;
     switch (state) {
-        case IMTransitionPercentStateBegin: {
-            self.interactive = YES;
-            if (!self.dismissVC.isBeingDismissed) {
+        case IMTransitionPercentStateBegin:
+        case IMTransitionPercentStateChanged: {
+            if (!self.interactive) {
+                self.interactive = YES;
                 [self.dismissVC dismissViewControllerAnimated:YES completion:nil];
             }
-        } break;
-        case IMTransitionPercentStateChanged: {
             [self updateInteractiveTransition:percent];
         } break;
         case IMTransitionPercentStateEnded: {
             self.interactive = NO;
             if (percent > self.percentThreshold) {
-                self.completionSpeed = 1;
+                self.completionSpeed = 1 - percent;
                 [self finishInteractiveTransition];
             } else {
                 self.completionSpeed = percent;
@@ -110,7 +109,7 @@
     if ([otherGestureRecognizer.view isKindOfClass:UIScrollView.class]
         && [otherGestureRecognizer isKindOfClass:UIPanGestureRecognizer.class]
         && [(UIPanGestureRecognizer *)otherGestureRecognizer translationInView:otherGestureRecognizer.view].y > 0
-        && otherGestureRecognizer.view.tag != IMPageViewController_ScrollViewTag) {
+        && otherGestureRecognizer.view.tag == IMTransitionAnimationRecognizeSimultaneouslyGestureViewTag) {
         UIScrollView *scrollView = (UIScrollView *)otherGestureRecognizer.view;
         if (scrollView.contentOffset.y <= self.dismissScrollThreshold) {
             [scrollView setContentOffset:CGPointMake(0, self.dismissScrollThreshold)];

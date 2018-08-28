@@ -9,7 +9,7 @@
 #ifndef IMSpecialTag_h
 #define IMSpecialTag_h
 
-/** PageViewController 中的ScrollView Tag */
-#define IMPageViewController_ScrollViewTag 1000
+/** IMTransitionAnimation 转场动画需要同时识别手势的View.tag。及标记此tag值的View,动画手势与之冲突时，需要询问是否同时响应 */
+#define IMTransitionAnimationRecognizeSimultaneouslyGestureViewTag 1000
 
 #endif /* IMSpecialTag_h */

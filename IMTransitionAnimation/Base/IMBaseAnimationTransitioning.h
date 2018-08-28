@@ -19,6 +19,11 @@ typedef NS_ENUM(NSInteger, IMTransitionPercentState) {
     IMTransitionPercentStateEnded,
 };
 
+typedef NS_ENUM(NSInteger, IMTransitionDirection) {
+    IMTransitionDirectionVertical = 0,
+    IMTransitionDirectionHorizontal
+};
+
 @protocol IMAnimationTransitioningDelegate
 
 /** present动画【需要子类实现】 */
@@ -41,7 +46,7 @@ typedef NS_ENUM(NSInteger, IMTransitionPercentState) {
 @property (nonatomic, weak) UIViewController *dismissVC;
 /** 是否开始响应转场动画手势 */
 @property (nonatomic, assign) BOOL interactive;
-/** 转场动画百分比阈值(即转场动画结束时，百分比超过此值，则完成转场动画，否则恢复到转场动画开始前的效果)【默认值:0.5】 */
+/** 转场动画百分比阈值(即转场动画结束时，百分比超过此值，则完成转场动画，否则恢复到转场动画开始前的效果)【默认值:0.3】 */
 @property (nonatomic, assign) CGFloat percentThreshold;
 /**
  添加手势

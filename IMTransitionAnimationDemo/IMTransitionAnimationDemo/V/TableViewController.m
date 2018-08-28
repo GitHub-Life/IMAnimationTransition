@@ -9,6 +9,8 @@
 #import "TableViewController.h"
 #import "IMPresentAnimationTransitioning.h"
 #import "IMMiddleAnimationTransitioning.h"
+#import "IMPresentListAnimationTransitioning.h"
+#import "IMSpecialTag.h"
 #import "ViewController.h"
 #import "UIView+IMRect.h"
 
@@ -28,6 +30,7 @@ static NSString * const CellIdentifier = @"CellIdentifier";
 }
 
 - (void)initView {
+    self.tableView.tag = IMTransitionAnimationRecognizeSimultaneouslyGestureViewTag;
     [self.tableView setBackgroundColor:UIColor.groupTableViewBackgroundColor];
     [self.tableView registerClass:UITableViewCell.class forCellReuseIdentifier:CellIdentifier];
 }
@@ -66,7 +69,7 @@ static NSString * const CellIdentifier = @"CellIdentifier";
         return;
     }
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if (indexPath.row % 2) {
+        if (indexPath.row % 3 == 0) {
             UINavigationController *naviVC = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"NavigationVC"];
             TableViewController *tableVC = (TableViewController *)naviVC.topViewController;
             tableVC.presentAnimationTransitioning = [[IMPresentAnimationTransitioning alloc] init];
@@ -76,7 +79,7 @@ static NSString * const CellIdentifier = @"CellIdentifier";
             naviVC.transitioningDelegate = tableVC.presentAnimationTransitioning;
             //            [self.navigationController presentViewController:naviVC animated:YES completion:nil];
             [self presentViewController:naviVC animated:YES completion:nil];
-        } else {
+        } else if (indexPath.row % 3 == 1) {
             UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
             CGRect cellFrame = [cell convertRect:cell.bounds toView:self.navigationController.view];
             UINavigationController *naviVC = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"NavigationVC"];
@@ -86,6 +89,17 @@ static NSString * const CellIdentifier = @"CellIdentifier";
 //            tableVC.middleAnimationTransitioning.segmentationVerticalOffset = UIEdgeInsetsMake(CGRectGetHeight(cellFrame) / 2, 0, CGRectGetHeight(cellFrame) / 2, 0);
             [tableVC.middleAnimationTransitioning addPanGerstureForTargetView:naviVC.view dismissVC:naviVC];
             naviVC.transitioningDelegate = tableVC.middleAnimationTransitioning;
+            //            [self.navigationController presentViewController:naviVC animated:YES completion:nil];
+            [self presentViewController:naviVC animated:YES completion:nil];
+        } else {
+            UINavigationController *naviVC = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"NavigationVC"];
+            TableViewController *tableVC = (TableViewController *)naviVC.topViewController;
+            tableVC.presentListAnimationTransitioning = [[IMPresentListAnimationTransitioning alloc] init];
+            [tableVC.presentListAnimationTransitioning addPanGerstureForTargetView:naviVC.navigationBar dismissVC:naviVC];
+            [tableVC.presentListAnimationTransitioning addPanGerstureForTargetView:tableVC.tableView dismissVC:naviVC];
+            tableVC.presentListAnimationTransitioning.topOffset = UIApplication.sharedApplication.statusBarFrame.size.height;
+            tableVC.presentListAnimationTransitioning.cornerRadius = 10;
+            naviVC.transitioningDelegate = tableVC.presentListAnimationTransitioning;
             //            [self.navigationController presentViewController:naviVC animated:YES completion:nil];
             [self presentViewController:naviVC animated:YES completion:nil];
         }
@@ -100,7 +114,7 @@ static NSString * const CellIdentifier = @"CellIdentifier";
 }
 
 - (IMBaseAnimationTransitioning *)animationTransitioning {
-    return _presentAnimationTransitioning ?: _middleAnimationTransitioning;
+    return _presentAnimationTransitioning ?: (_middleAnimationTransitioning ?: _presentListAnimationTransitioning);
 }
 
 @end
